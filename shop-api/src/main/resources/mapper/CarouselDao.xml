@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.shopapi.dao.CarouselDao">
+
+    <resultMap type="com.edu.shopapi.entity.Carousel" id="CarouselMap">
+        <result property="carouselId" column="carousel_id" jdbcType="INTEGER"/>
+        <result property="carouselUrl" column="carousel_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="carouselId" useGeneratedKeys="true">
+        insert into shoppe_db.carousel(carousel_url)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.carouselUrl})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="carouselId" useGeneratedKeys="true">
+        insert into shoppe_db.carousel(carousel_url)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.carouselUrl})
+        </foreach>
+        on duplicate key update
+carousel_url = values(carousel_url)     </insert>
+
+</mapper>
+

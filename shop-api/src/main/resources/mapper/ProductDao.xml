@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.shopapi.dao.ProductDao">
+
+    <resultMap type="com.edu.shopapi.entity.Product" id="ProductMap">
+        <result property="productId" column="product_id" jdbcType="INTEGER"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productTitle" column="product_title" jdbcType="VARCHAR"/>
+        <result property="productIntro" column="product_intro" jdbcType="VARCHAR"/>
+        <result property="productPrice" column="product_price" jdbcType="NUMERIC"/>
+        <result property="productSellPrice" column="product_sell_price" jdbcType="NUMERIC"/>
+        <result property="productPic" column="product_pic" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="productId" useGeneratedKeys="true">
+        insert into shoppe_db.product(product_name,product_title,product_intro,product_price,product_sell_price,product_pic,category_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.productName}#{entity.productTitle}#{entity.productIntro}#{entity.productPrice}#{entity.productSellPrice}#{entity.productPic}#{entity.categoryId})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="productId" useGeneratedKeys="true">
+        insert into shoppe_db.product(product_name,product_title,product_intro,product_price,product_sell_price,product_pic,category_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productName}#{entity.productTitle}#{entity.productIntro}#{entity.productPrice}#{entity.productSellPrice}#{entity.productPic}#{entity.categoryId})
+        </foreach>
+        on duplicate key update
+product_name = values(product_name) product_title = values(product_title) product_intro = values(product_intro) product_price = values(product_price) product_sell_price = values(product_sell_price) product_pic = values(product_pic) category_id = values(category_id)     </insert>
+
+</mapper>
+

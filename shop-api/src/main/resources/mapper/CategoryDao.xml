@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.shopapi.dao.CategoryDao">
+
+    <resultMap type="com.edu.shopapi.entity.Category" id="CategoryMap">
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+        <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="categoryId" useGeneratedKeys="true">
+        insert into shoppe_db.category(category_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.categoryName})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="categoryId" useGeneratedKeys="true">
+        insert into shoppe_db.category(category_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.categoryName})
+        </foreach>
+        on duplicate key update
+category_name = values(category_name)     </insert>
+
+</mapper>
+
